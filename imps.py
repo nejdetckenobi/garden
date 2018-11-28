@@ -1,24 +1,9 @@
 from PIL import Image
 from random import choice, randrange
-from argparse import ArgumentParser
 import imageio
 from io import BytesIO
 
 
-parser = ArgumentParser()
-parser.add_argument('WIDTH', type=int)
-parser.add_argument('HEIGHT', type=int)
-parser.add_argument('OUTPUT', type=str)
-# parser.add_argument('--colors', type=list, nargs='*')
-args = parser.parse_args()
-WIDTH = args.WIDTH + (args.WIDTH + 1) % 2
-HEIGHT = args.HEIGHT + (args.HEIGHT + 1) % 2
-OUTPUT = args.OUTPUT
-# COLORS = args.colors if args.colors else ['#FFF']
-
-
-def checked(p):
-    return 0 < p[0] < WIDTH and 0 < p[1] < HEIGHT
 
 
 def mid_point(p1, p2):
@@ -26,14 +11,21 @@ def mid_point(p1, p2):
 
 
 class Tree(object):
-    def __init__(self, start_point, color):
+    def __init__(self, start_point, color, garden):
         super(Tree, self).__init__()
+        self.garden = garden
         self.start_point = start_point
         self.color = color
         self.current_point = start_point
         self.active = [self.current_point]
-        self.visited = {self.current_point: 1}
-        self.mapper = {}
+        if self.current_point in self.garden.mapper:
+            raise ValueError('Your starting point conflicts ' 
+                             'with at least one of existing Tree objects\'')
+        self.garden.mapper[self.current_point] =  self.color
+
+    def checked(self, p):
+        return 0 < p[0] < self.garden.width and 0 < p[1] < self.garden.height
+
 
     def tick(self):
         left = (self.current_point[0] - 2, self.current_point[1])
@@ -42,7 +34,7 @@ class Tree(object):
         down = (self.current_point[0], self.current_point[1] - 2)
 
         neighbours = [n for n in (left, right, up, down)
-                      if checked(n) and n not in self.visited]
+                      if self.checked(n) and n not in self.garden.mapper]
 
         if not neighbours:
             index = randrange(0, len(self.active))
@@ -50,21 +42,19 @@ class Tree(object):
             self.active.pop(index)
         else:
             picked = choice(neighbours)
-            self.visited[picked] = 1
             self.active.append(picked)
             m = mid_point(self.current_point, picked)
-            self.mapper[m] = self.color
-            self.mapper[self.current_point] = self.color
-            self.mapper[picked] = self.color
+            self.garden.mapper[m] = self.color
+            self.garden.mapper[self.current_point] = self.color
+            self.garden.mapper[picked] = self.color
             self.current_point = picked
-
+    
 
 class Garden(object):
     def __init__(self, width, height):
         super(Garden, self).__init__()
         self.trees = []
         self.mapper = {}
-        self.visited = {}
         self.width = width
         self.height = height
 
@@ -74,9 +64,7 @@ class Garden(object):
                 t.tick()
 
     def add_tree(self, start_point, color):
-        new_tree = Tree(start_point, color)
-        new_tree.mapper = self.mapper
-        new_tree.visited = self.visited
+        new_tree = Tree(start_point, color, self)
         self.trees.append(new_tree)
 
     def process(self):
@@ -94,23 +82,10 @@ class Garden(object):
         return img
 
     def make_gif(self, filepath):
-        with imageio.get_writer(filepath, mode='I', fps=60) as writer:
+        with imageio.get_writer(filepath, mode='I', fps=60, subrectangles=True) as writer:
             while sum([len(t.active) for t in self.trees]):
                 self.tick()
                 temp = BytesIO()
                 self.dump().save(temp, format='png')
                 temp.seek(0)
                 writer.append_data(imageio.imread(temp))
-            help(writer)
-
-
-if __name__ == '__main__':
-    g = Garden(WIDTH, HEIGHT)
-    g.add_tree((1, 1), (255, 0, 0))
-    g.add_tree((WIDTH - 2, 1), (255, 255, 0))
-    g.add_tree((1, HEIGHT - 2), (0, 255, 0))
-    g.add_tree((WIDTH-2, HEIGHT-2), (0, 0, 255))
-    g.make_gif(OUTPUT)
-    # g.process()
-    # image = g.dump(OUTPUT)
-    # image.save(filepath, format='png')
