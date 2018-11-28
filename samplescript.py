@@ -3,8 +3,8 @@
 from imps import Garden
 
 
-WIDTH = 512
-HEIGHT = 512
+WIDTH = 100
+HEIGHT = 100
 
 # Sizes should be fit (2*k + 1) format. k is integer.
 WIDTH = WIDTH + (WIDTH + 1) % 2
