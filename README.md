@@ -37,7 +37,7 @@ This is the result when you run `samplescript.py`
 
 ![opt](https://user-images.githubusercontent.com/4905664/49155447-043cbc80-f32c-11e8-87a8-bcecccf17c47.gif)
 
-This is another maze with the size of 1001x1001
+This is another maze with the size of 512 x 512
 
 ![lab](https://user-images.githubusercontent.com/4905664/49157317-9050e300-f330-11e8-9342-6be42cd44751.png)
 
