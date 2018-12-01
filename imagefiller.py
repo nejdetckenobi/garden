@@ -33,6 +33,15 @@ if __name__ == '__main__':
 
     cg = CustomGarden(img2)
     cg.add_tree((31, 81), (255, 0, 0))
+    cg.add_tree((31, 141), (255, 255, 0))
+    cg.add_tree((75, 105), (0, 0, 255))
+
+    cg.add_tree((119, 69), (0, 0, 255))
     cg.add_tree((181, 107), (255, 255, 0))
+    cg.add_tree((119, 144), (255, 0, 0))
+
+    cg.add_tree((283, 129), (255, 0, 0))
+    cg.add_tree((245, 71), (255, 255, 0))
     cg.add_tree((251, 121), (0, 0, 255))
+
     cg.make_gif('out.gif')

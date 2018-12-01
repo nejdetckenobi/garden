@@ -44,3 +44,6 @@ This is another maze with the size of 512 x 512
 Some other things with customized classes.
 
 ![opt2](https://user-images.githubusercontent.com/4905664/49330750-158ffe00-f5a4-11e8-9264-03efdf44de7e.gif)
+
+Or you can put multiple trees in the same container and let them grow.
+![opt3](https://user-images.githubusercontent.com/4905664/49330897-58eb6c00-f5a6-11e8-9b00-43d33bf1e1c8.gif)
