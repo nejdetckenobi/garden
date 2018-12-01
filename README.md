@@ -25,7 +25,7 @@ Setting up the project is easy. Follow these steps:
 
 - To generate a simple animation with 5 mazes, use:
   `python samplescript.py`
-  
+
 - After that, you'll get a file named `lab.gif`. This is the animation. It's unoptimized so before trying to upload anywhere, I recommend optimizing it via tools like `gifsicle`
 
 
@@ -41,3 +41,6 @@ This is another maze with the size of 512 x 512
 
 ![lab](https://user-images.githubusercontent.com/4905664/49157317-9050e300-f330-11e8-9342-6be42cd44751.png)
 
+Some other things with customized classes.
+
+![opt2](https://user-images.githubusercontent.com/4905664/49330750-158ffe00-f5a4-11e8-9264-03efdf44de7e.gif)

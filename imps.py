@@ -81,8 +81,7 @@ class Garden(object):
         return img
 
     def make_gif(self, filepath):
-        with imageio.get_writer(filepath, mode='I', fps=60,
-                                subrectangles=True) as writer:
+        with imageio.get_writer(filepath, mode='I', fps=60) as writer:
             while sum([len(t.active) for t in self.trees]):
                 self.tick()
                 temp = BytesIO()
