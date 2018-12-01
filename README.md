@@ -6,10 +6,10 @@
 Setting up the project is easy. Follow these steps:
 
 - Clone this repo
-  `git clone https://github.com/nejdetckenobi/maze-generators`
+  `git clone https://github.com/nejdetckenobi/garden`
 
 - Go to project directory
-  `cd maze-generators`
+  `cd garden`
 
 - Create a virtual environment
   `virtualenv -p $(which python3) venv`
