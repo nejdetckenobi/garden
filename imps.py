@@ -4,8 +4,6 @@ import imageio
 from io import BytesIO
 
 
-
-
 def mid_point(p1, p2):
     return (p1[0]+p2[0])/2, (p1[1]+p2[1])/2
 
@@ -16,16 +14,17 @@ class Tree(object):
         self.garden = garden
         self.start_point = start_point
         self.color = color
+        start_point = (2 * (start_point[0] // 2) + 1,
+                       2 * (start_point[1] // 2) + 1)
         self.current_point = start_point
         self.active = [self.current_point]
         if self.current_point in self.garden.mapper:
-            raise ValueError('Your starting point conflicts ' 
+            raise ValueError('Your starting point conflicts '
                              'with at least one of existing Tree objects\'')
-        self.garden.mapper[self.current_point] =  self.color
+        self.garden.mapper[self.current_point] = self.color
 
     def checked(self, p):
         return 0 < p[0] < self.garden.width and 0 < p[1] < self.garden.height
-
 
     def tick(self):
         left = (self.current_point[0] - 2, self.current_point[1])
@@ -48,7 +47,7 @@ class Tree(object):
             self.garden.mapper[self.current_point] = self.color
             self.garden.mapper[picked] = self.color
             self.current_point = picked
-    
+
 
 class Garden(object):
     def __init__(self, width, height):
@@ -82,7 +81,8 @@ class Garden(object):
         return img
 
     def make_gif(self, filepath):
-        with imageio.get_writer(filepath, mode='I', fps=60, subrectangles=True) as writer:
+        with imageio.get_writer(filepath, mode='I', fps=60,
+                                subrectangles=True) as writer:
             while sum([len(t.active) for t in self.trees]):
                 self.tick()
                 temp = BytesIO()
