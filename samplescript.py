@@ -1,31 +1,44 @@
 #!/usr/bin/env python3
 
-from imps import Garden
+from sys import exit
+from argparse import ArgumentParser
+from importlib import import_module
+
+parser = ArgumentParser()
 
 
-WIDTH = 100
-HEIGHT = 100
+parser.add_argument("width", type=int)
+parser.add_argument("height", type=int)
+parser.add_argument("output_file", type=str)
+parser.add_argument("--garden", "-g", type=str, default="garden.Garden")
+parser.add_argument("--tree", "-t", type=str, default="tree.Tree")
 
-# Sizes should be fit (2*k + 1) format. k is integer.
-WIDTH = WIDTH + (WIDTH + 1) % 2
-HEIGHT = HEIGHT + (HEIGHT + 1) % 2
+args = parser.parse_args()
 
-# Output file name
 
-if __name__ == '__main__':
-    g = Garden(WIDTH, HEIGHT)
-    g.add_tree((1, 1), (255, 0, 0))
-    g.add_tree((WIDTH - 2, 1), (255, 255, 0))
-    g.add_tree((1, HEIGHT - 2), (0, 255, 0))
-    g.add_tree((WIDTH-2, HEIGHT-2), (0, 0, 255))
-    g.add_tree((WIDTH // 2 - 1, HEIGHT // 2 - 1), (253, 89, 86))
+if args.width % 2 != 1:
+    print("Width must be an odd number")
+    exit(1)
 
-    # Uncomment this line to make a GIF
-    OUTPUT = 'lab.gif'
-    g.make_gif(OUTPUT)
-    
-    # Uncomment these lines to get a PNG image
-    #OUTPUT = 'lab.png'
-    #g.process()
-    #image = g.dump()
-    #image.save(OUTPUT, format='png')
+if args.height % 2 != 1:
+    print("Height must be an odd number")
+    exit(1)
+
+module_name, cls_name = args.garden.rsplit(".", 1)
+module = import_module(module_name)
+garden_cls = getattr(module, cls_name)
+
+garden = garden_cls(args.width, args.height)
+
+
+module_name, cls_name = args.tree.rsplit(".", 1)
+module = import_module(module_name)
+tree_cls = getattr(module, cls_name)
+
+new_tree = tree_cls((1, 1), (255, 255, 255), garden)
+garden.trees.append(new_tree)
+
+
+garden.process()
+image = garden.dump()
+image.save(args.output_file, format="png")

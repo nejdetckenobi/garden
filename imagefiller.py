@@ -1,5 +1,6 @@
 from PIL import Image
-from imps import Garden, Tree
+from garden import Garden
+from tree import Tree
 
 
 class CustomTree(Tree):
@@ -14,8 +15,7 @@ class CustomTree(Tree):
 
 class CustomGarden(Garden):
     def __init__(self, image, *args, **kwargs):
-        super(CustomGarden, self).__init__(width=image.width,
-                                           height=image.height)
+        super(CustomGarden, self).__init__(width=image.width, height=image.height)
         self.image = image
         self.pxdata = image.load()
 
@@ -24,9 +24,9 @@ class CustomGarden(Garden):
         self.trees.append(new_tree)
 
 
-if __name__ == '__main__':
-    fp = open('resources/eda.png', 'rb')
-    img = Image.open(fp, mode='r')
+if __name__ == "__main__":
+    fp = open("resources/eda.png", "rb")
+    img = Image.open(fp, mode="r")
     threshold = 127
     img2 = img.point(lambda p: p > threshold and 255)
     fp.close()
@@ -44,4 +44,4 @@ if __name__ == '__main__':
     cg.add_tree((245, 71), (255, 255, 0))
     cg.add_tree((251, 121), (0, 0, 255))
 
-    cg.make_gif('out.gif')
+    cg.make_gif("out.gif")
