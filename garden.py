@@ -4,10 +4,10 @@ from io import BytesIO
 
 
 class Garden(object):
-    def __init__(self, width, height):
+    def __init__(self, width, height, memory):
         super(Garden, self).__init__()
         self.trees = []
-        self.mapper = {}
+        self.memory = memory
         self.width = width
         self.height = height
 
@@ -24,7 +24,7 @@ class Garden(object):
         data = []
         for h in range(self.height):
             for w in range(self.width):
-                data.append(self.mapper.get((w, h), (0, 0, 0)))
+                data.append(self.memory.get((w, h), (0, 0, 0)))
 
         img = Image.new("RGB", (self.width, self.height), color=(0, 0, 0))
         img.putdata(data)

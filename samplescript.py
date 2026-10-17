@@ -4,6 +4,13 @@ from sys import exit
 from argparse import ArgumentParser
 from importlib import import_module
 
+
+def import_obj(path):
+    module_name, obj_name = path.rsplit(".", 1)
+    module = import_module(module_name)
+    return getattr(module, obj_name)
+
+
 parser = ArgumentParser()
 
 
@@ -24,18 +31,25 @@ if args.height % 2 != 1:
     print("Height must be an odd number")
     exit(1)
 
-module_name, cls_name = args.garden.rsplit(".", 1)
-module = import_module(module_name)
-garden_cls = getattr(module, cls_name)
 
-garden = garden_cls(args.width, args.height)
+garden_cls = import_obj(args.garden)
+shared_memory: dict = {}
 
+garden = garden_cls(
+    width=args.width,
+    height=args.height,
+    memory=shared_memory,
+)
 
-module_name, cls_name = args.tree.rsplit(".", 1)
-module = import_module(module_name)
-tree_cls = getattr(module, cls_name)
+tree_cls = import_obj(args.tree)
 
-new_tree = tree_cls((1, 1), (255, 255, 255), garden)
+new_tree = tree_cls(
+    start_point=(1, 1),
+    color=(255, 255, 255),
+    width=args.width,
+    height=args.height,
+    memory=shared_memory,
+)
 garden.trees.append(new_tree)
 
 
